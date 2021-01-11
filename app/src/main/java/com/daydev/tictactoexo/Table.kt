@@ -101,29 +101,74 @@ class Game(var tableSize: Int, var consecutivePoint: Int) {
             }
         }
 
-        //check Diagonally(1/1)
-        var j = tableSize-1
-        for (i in table.indices){
-            when(table[j--][i]){
-                player1 -> {
-                    countPointX++
-                    if (countPointX != consecutivePoint && i+1 < table.size-1 && j-1 >= 0 && table[j-1][i+1] != player1) {
-                        countPointX = 0
-                        continue
+        countPointX = 0
+        countPointO = 0
+
+        //check Diagonally(/)
+        var diagonallyLine: Int = (table.size*2)-1
+        var midLine: Int = (diagonallyLine/2)+1
+        var itemInDiagonal = 0
+
+        for (i in 0 until diagonallyLine){
+            var row = 0
+            var col = 0
+
+            //check first half (/)
+            if (i <= midLine-1){
+                itemInDiagonal++
+                for (j in 0 until itemInDiagonal){
+                    row = i - j
+                    col = j
+                    when(table[row][col]){
+                        player1 -> {
+                            countPointX++
+                            if (countPointX != consecutivePoint && row-1 >= 0  && table[row-1][col+1] != player1) {
+                                countPointX = 0
+                                continue
+                            }
+                        }
+                        player2 -> {
+                            countPointO++
+                            if (countPointO != consecutivePoint && row-1 >= 0 && table[row-1][col+1] != player2) {
+                                countPointO = 0
+                                continue
+                            }
+                        }
                     }
                 }
-                player2 -> {
-                    countPointO++
-                    if (countPointO != consecutivePoint && i+1 < table.size-1 && j-1 >= 0 && table[j-1][i+1] != player2) {
-                        countPointO = 0
-                        continue
+                if (countPointX==consecutivePoint || countPointO==consecutivePoint){
+                    return true
+                }
+            }else{  //check second half (/)
+                itemInDiagonal--
+                for (j in 0 until itemInDiagonal){
+                    row = table.size - (j+1)
+                    col = (i - table.size) + (j+1)
+                    when(table[row][col]){
+                        player1 -> {
+                            countPointX++
+                            if (countPointX != consecutivePoint && col+1 < table.size-1 && table[row-1][col+1] != player1) {
+                                countPointX = 0
+                                continue
+                            }
+                        }
+                        player2 -> {
+                            countPointO++
+                            if (countPointO != consecutivePoint && col+1 < table.size-1 && table[row-1][col+1] != player2) {
+                                countPointO = 0
+                                continue
+                            }
+                        }
                     }
                 }
+                if (countPointX==consecutivePoint || countPointO==consecutivePoint){
+                    return true
+                }
             }
-            if (countPointX==consecutivePoint || countPointO==consecutivePoint){
-                return true
-            }
+            countPointX = 0
+            countPointO = 0
         }
+
 
         return false
     }
