@@ -177,8 +177,8 @@ class Game(var tableSize: Int, var consecutivePoint: Int) {
     fun winner(): String{
         var winner = countPointX - countPointO
         return when{
-            winner > 0 -> "$player1 Win! $countPointX : $countPointO"
-            winner < 0 -> "$player2 Win! $countPointX : $countPointO"
+            winner > 0 -> "$player1 Win!"
+            winner < 0 -> "$player2 Win!"
             else -> "Equal"
         }
     }
